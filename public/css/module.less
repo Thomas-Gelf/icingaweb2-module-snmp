@@ -1,0 +1,100 @@
+/** From Director */
+div.action-bar a, div.action-bar form i {
+  color: @icinga-blue;
+}
+
+div.action-bar > a {
+  margin-right: 1em;
+}
+
+div.action-bar {
+  .pagination-control {
+    float: none;
+    clear: none;
+    display: inline-block;
+    line-height: inherit;
+    margin: 0;
+    vertical-align: middle;
+  }
+
+  form input {
+    margin: 0;
+  }
+}
+
+.content a {
+  color: @icinga-blue;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+table.common-table {
+  max-width: 68em;
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  th {
+    padding-top: 0.5em;
+  }
+  td {
+    vertical-align: top;
+  }
+
+  pre {
+    margin: 0;
+    padding: 0.2em;
+    max-height: 18em;
+    background: @gray-lightest;
+    overflow: auto;
+    word-break: keep-all;
+    white-space: pre;
+    display: inline-block;
+  }
+}
+
+form.quicksearch {
+  display: block;
+  input.search {
+    width: 8em;
+    min-width: unset;
+    border: none;
+    background-size: 0.75em auto;
+    background-position: 0.5em 0.9em;
+    padding-left: 1.5em;
+    margin-left: 1.5em;
+    font-size: 0.75em;
+    font-weight: normal;
+    &:focus {
+      width: 16em;
+      .transition(width 0.5s ease);
+      border: none;
+    }
+  }
+}
+
+input[type=checkbox] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  color: @icinga-blue;
+  outline: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  padding: 0.2em;
+}
+
+input[type=checkbox]:focus {
+  border-color: @icinga-blue;
+}
+
+input[type=checkbox]:before {
+  font-family: 'ifont';
+  content: '\e806';
+}
+
+input[type=checkbox]:checked:before {
+  content: '\e803';
+}
