@@ -2,6 +2,7 @@
 
 namespace Icinga\Module\Snmp\Controllers;
 
+use dipl\Html\Html;
 use dipl\Html\Link;
 use dipl\Web\Widget\NameValueTable;
 use Icinga\Module\Snmp\ActionController;
@@ -36,8 +37,12 @@ class MibController extends ActionController
         if (empty($parsed->imports)) {
             $dependencies->addNameValueRow('-', 'This MIB has no IMPORTS / dependencies');
         } else {
+            $dependencies->addNameValueRow(
+                Html::tag('strong', null, 'MIB'),
+                Html::tag('strong', null, 'Imported Objects')
+            );
             foreach ($parsed->imports as $import => $objects) {
-                $dependencies->addNameValueRow($import, implode(', ' ,$objects));
+                $dependencies->addNameValueRow($import, implode(', ', $objects));
             }
         }
         $this->content()->add([
