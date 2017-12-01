@@ -29,14 +29,20 @@ my $r = $mib->parse_Module();
 delete $mib->{'stream'};
 $fh->close;
 
+use JSON;
+
 unless ($r) {
-  print "Unable to parse MIB\n";
+  my $err = "Unable to parse MIB:";
+  foreach my $msg (@{$mib->{'msg'}}) {
+    $err .= ' ' . $msg->{'msg'};
+  }
+  print "$err\n";
+  #  print "Unable to parse MIB: " . join(', ', @{$mib->{'msg'}}) . "\n";
   exit(1);
 }
 
 $mib->create_tree();
 
-use JSON;
 print to_json {
    'name'    => $mib->{'name'},
    'imports' => $mib->{'imports'},
