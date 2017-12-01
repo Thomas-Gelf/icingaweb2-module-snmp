@@ -9,6 +9,69 @@ use React\EventLoop\Factory as Loop;
 
 class MibParser
 {
+    protected static $lastValidationErrors;
+
+    public static function preValidateFile($filename)
+    {
+        $binary = '/usr/bin/smilint';
+        if (! file_exists($binary)) {
+            throw new IcingaException('%s not found', $binary);
+        }
+
+        $command = sprintf(
+            "exec %s '%s' -l 2",
+            $binary,
+            escapeshellarg($filename)
+        );
+
+        $loop = Loop::create();
+        $process = new Process($command);
+        $process->start($loop);
+        $buffer = '';
+        $timer = $loop->addTimer(10, function () use ($process) {
+            $process->terminate();
+        });
+        $process->stdout->on('data', function ($string) use (& $buffer) {
+            $buffer .= $string;
+        });
+        $process->stderr->on('data', function ($string) use (& $buffer) {
+            $buffer .= $string;
+        });
+        $process->on('exit', function ($exitCode, $termSignal) use ($timer) {
+            $timer->cancel();
+            if ($exitCode === null) {
+                if ($termSignal === null) {
+                    throw new IcingaException(
+                        'Fuck, I have no idea how the validator got killed'
+                    );
+                } else {
+                    throw new IcingaException(
+                        "They killed the validator with $termSignal"
+                    );
+                }
+            } else {
+                if ($exitCode !== 0) {
+                    throw new IcingaException("Validator exited with $exitCode");
+                }
+            }
+        });
+
+        $loop->run();
+
+        if (empty($buffer)) {
+            return true;
+        } else {
+            self::$lastValidationErrors = $buffer;
+
+            return false;
+        }
+    }
+
+    public static function getLastValidationError()
+    {
+        return self::$lastValidationErrors;
+    }
+
     public static function parseString($string)
     {
         $loop = Loop::create();
