@@ -42,6 +42,7 @@ class MibForm extends QuickForm
     {
         /** @var \Zend_Form_Element_File $el */
         $el = $this->getElement('uploaded_file');
+        $originalFilename = $el->getValue();
 
         if ($el && $this->hasBeenSent()) {
             $tmpDir = $this->getTempDir();
@@ -61,7 +62,7 @@ class MibForm extends QuickForm
                     'client_ip' => $_SERVER['REMOTE_ADDR'],
                     'mib_name'          => $parsed->name,
                     'imports_from'      => json_encode(array_keys((array) $parsed->imports)),
-                    'original_filename' => $this->getValue('uploaded_file'),
+                    'original_filename' => $originalFilename,
                     'raw_mib_file'      => $source,
                     'parsed_mib'        => json_encode($parsed),
                 ])->store($this->db);
@@ -82,7 +83,8 @@ class MibForm extends QuickForm
             $this->processUploadedSource();
         } catch (Exception $e) {
             $this->addError($e->getMessage());
-            return false;
+
+            return;
         }
         $this->redirectOnSuccess('New MIB file has been enqueued');
     }
