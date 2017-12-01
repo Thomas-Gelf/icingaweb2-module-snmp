@@ -33,3 +33,17 @@ CREATE TABLE snmp_agent (
   PRIMARY KEY (id),
   CONSTRAINT snmp_agent_credential FOREIGN KEY (credential_id) REFERENCES snmp_credential (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE mib_upload (
+  id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  username VARCHAR(255),
+  client_ip VARCHAR(45),
+  upload_time BIGINT(20) NOT NULL,
+  mib_name VARCHAR(64) NOT NULL,
+  imports_from TEXT,
+  original_filename VARCHAR(255),
+  raw_mib_file MEDIUMTEXT,
+  parsed_mib MEDIUMTEXT,
+  PRIMARY KEY(id),
+  INDEX mib_name (mib_name)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
