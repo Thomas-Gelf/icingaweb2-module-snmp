@@ -3,9 +3,8 @@
 namespace Icinga\Module\Snmp\Forms;
 
 use Icinga\Exception\IcingaException;
-use Icinga\Module\Director\Web\Form\QuickForm as DQF;
+use Icinga\Module\Director\Web\Form\QuickForm;
 use Icinga\Module\Snmp\Credential as Obj;
-use Icinga\Module\Snmp\Web\Form\QuickForm;
 
 class CredentialForm extends QuickForm
 {
@@ -18,7 +17,7 @@ class CredentialForm extends QuickForm
 
     public function setup()
     {
-        var_dump(($this->object));
+        // var_dump(($this->object));
         $this->addElement('text', 'name', [
             'label' => $this->translate('Credential name'),
             'required' => true,
@@ -200,7 +199,7 @@ class CredentialForm extends QuickForm
 
     public function loadObject($id)
     {
-        echo "LOAD";
+        // echo "LOAD";
 
         $this->object = Obj::load($id, $this->db);
         $this->addHidden('id');
