@@ -2,7 +2,7 @@
 
 namespace Icinga\Module\Snmp;
 
-use Icinga\Module\Snmp\Data\Db\DbObject;
+use Icinga\Module\Director\Data\Db\DbObject;
 
 class Credential extends DbObject
 {
