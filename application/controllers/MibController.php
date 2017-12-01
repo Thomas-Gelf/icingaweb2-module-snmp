@@ -3,6 +3,7 @@
 namespace Icinga\Module\Snmp\Controllers;
 
 use dipl\Html\Html;
+use dipl\Html\Icon;
 use dipl\Html\Link;
 use dipl\Web\Widget\NameValueTable;
 use Icinga\Module\Snmp\ActionController;
@@ -16,8 +17,7 @@ class MibController extends ActionController
     public function uploadAction()
     {
         $form = (new MibForm())
-            ->setDb($this->db())
-            ->setSuccessUrl('snmp/mib/uploads');
+            ->setDb($this->db());
             $this->addSingleTab('Add');
             $this->addTitle($this->translate('Add SNMP MIB file'));
 
@@ -47,14 +47,16 @@ class MibController extends ActionController
         }
         $this->content()->add([
             $dependencies,
+            Html::tag('h2', null, 'MIB Tree'),
             MibParser::getHtmlTreeFromParsedMib($parsed),
         ])->addAttributes(['class' => 'icinga-module module-director']);
     }
 
     public function uploadsAction()
     {
+        $this->setAutorefreshInterval(1);
         $this->setSnmpTabs()->activate('mib_uploads');
-        $this->addTitle('MIB file uploads');
+        $this->addTitle('Upload your MIB files');
         $this->actions()->add(
             Link::create($this->translate('Add'), 'snmp/mib/upload', null, [
                 'class' => 'icon-plus',
@@ -62,6 +64,13 @@ class MibController extends ActionController
             ])
         );
 
-        (new MibUploadsTable($this->db()))->renderTo($this);
+        $table = new MibUploadsTable($this->db());
+        if (count($table)) {
+            $table->renderTo($this);
+        } else {
+            $this->content()
+                ->add(Icon::create('ok'))
+                ->add('There are no pending MIB files in our queue');
+        }
     }
 }
