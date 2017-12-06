@@ -30,7 +30,8 @@ class MibController extends ActionController
         $this->addSingleTab('Process MIB');
         $this->addTitle($this->translate('Process uploaded MIB file'));
         $id = $this->params->getRequired('id');
-        $upload = MibUpload::load($id, $this->db());
+        $db = $this->db();
+        $upload = MibUpload::load($id, $db);
         $parsed = json_decode($upload->get('parsed_mib'));
 
         $dependencies = new NameValueTable();
@@ -42,6 +43,10 @@ class MibController extends ActionController
                 Html::tag('strong', null, 'Imported Objects')
             );
             foreach ($parsed->imports as $import => $objects) {
+                if ($refId = MibUpload::getNewestIdForName($import, $db)) {
+                    $import = Link::create($import, 'snmp/mib/process', ['id' => $refId]);
+                }
+
                 $dependencies->addNameValueRow($import, implode(', ', $objects));
             }
         }

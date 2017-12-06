@@ -22,4 +22,17 @@ class MibUpload extends DbObject
         'raw_mib_file'      => null,
         'parsed_mib'        => null,
     ];
+
+    public static function getNewestIdForName($name, Db $connection)
+    {
+        $db = $connection->getDbAdapter();
+
+        return $db->fetchOne(
+            $db->select()
+                ->from('mib_upload', 'id')
+                ->where('mib_name = ?', $name)
+                ->order('id DESC')
+                ->limit(1)
+        );
+    }
 }
