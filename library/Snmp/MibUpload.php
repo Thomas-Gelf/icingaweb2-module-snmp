@@ -15,6 +15,7 @@ class MibUpload extends DbObject
     protected $defaultProperties = [
         'id'                => null,
         'username'          => null,
+        'upload_time'       => null,
         'client_ip'         => null,
         'mib_name'          => null,
         'imports_from'      => null,
