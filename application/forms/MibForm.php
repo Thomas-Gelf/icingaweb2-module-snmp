@@ -77,8 +77,9 @@ class MibForm extends QuickForm
             $this->fileCount++;
             // $this->addError(' Missing: ' . implode(', ', array_keys((array) $parsed->imports)));
             MibUpload::create([
-                'username' => Auth::getInstance()->getUser()->getUsername(),
-                'client_ip' => $_SERVER['REMOTE_ADDR'],
+                'username'          => Auth::getInstance()->getUser()->getUsername(),
+                'upload_time'       => (int) (microtime(true) * 1000),
+                'client_ip'         => $_SERVER['REMOTE_ADDR'],
                 'mib_name'          => $parsed->name,
                 'imports_from'      => json_encode(array_keys((array) $parsed->imports)),
                 'original_filename' => $originalFilename,
