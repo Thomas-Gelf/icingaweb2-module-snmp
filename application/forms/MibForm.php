@@ -52,6 +52,9 @@ class MibForm extends QuickForm
         }
 
         foreach ($_FILES['uploaded_file']['tmp_name'] as $key => $tmpFile) {
+            if (! is_uploaded_file($tmpFile)) {
+                continue;
+            }
             $originalFilename = $_FILES['uploaded_file']['name'][$key];
 
             $source = file_get_contents($tmpFile);
