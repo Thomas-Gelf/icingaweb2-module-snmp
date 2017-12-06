@@ -145,6 +145,10 @@ class MibParser
 
         foreach ($tree as $key => $members) {
             if (! array_key_exists($key, $seen)) {
+                if ((string) $key === '0') {
+                    // zeroDotZero
+                    continue;
+                }
                 $root = $key;
             }
         }
